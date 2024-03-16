@@ -1,4 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import LocationMarker from "./AddNewMarker";
+// import LocationMarker from "./AddNewMarker";
 
 export default function MapExample() {
   const position = { lat: 50.061389, lng: 19.938333 };
@@ -14,6 +16,7 @@ export default function MapExample() {
           A pretty CSS3 popup. <br /> Easily customizable.
         </Popup>
       </Marker>
+      <LocationMarker />
     </MapContainer>
   );
 }
