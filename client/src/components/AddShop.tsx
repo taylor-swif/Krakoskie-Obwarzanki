@@ -11,6 +11,10 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
+import { SingleDatepicker } from "chakra-dayzed-datepicker";
+
+
+
 
 interface Flavour {
   name: string;
@@ -30,6 +34,9 @@ function AddShop({
   //onAddShop: () => void;
   //shopData: { name: string; location: string; description: string; image: string };
 }) {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const [flavourChecked, setFlavourChecked] = useState(
     flavours.map((f) => {
       return {
@@ -57,9 +64,23 @@ function AddShop({
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader>Add Shop</AlertDialogHeader>
+          <AlertDialogHeader>Nowe stoisko</AlertDialogHeader>
           <AlertDialogBody>
-            <FormLabel mt={4}>Dostępne obwarzanki</FormLabel>
+            <FormLabel mt={4}>Data rozpoczęcia:</FormLabel>
+              <SingleDatepicker
+                name="startDate-input"
+                date={startDate}
+                onDateChange={setStartDate}
+              />
+
+            <FormLabel mt={4}>Data zakończenia:</FormLabel>
+              <SingleDatepicker
+                name="endDate-input"
+                date={endDate}
+                onDateChange={setEndDate}
+              />
+
+            <FormLabel mt={4}>Dostępne smaki obwarzanków</FormLabel>
             <CheckboxGroup colorScheme="teal">
               <VStack align={"start"}>
                 {flavourChecked.map((f, i) => {
