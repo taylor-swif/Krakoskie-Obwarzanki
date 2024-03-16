@@ -1,4 +1,5 @@
 import {
+  Input,
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
@@ -7,13 +8,18 @@ import {
   Checkbox,
   CheckboxGroup,
   FormLabel,
-  Textarea,
   VStack,
+  NumberInputStepper,
+  NumberInput,
+  Stack,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  NumberInputField,
+  FormControl,
+  Button,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
-
-
 
 
 interface Flavour {
@@ -34,8 +40,7 @@ function AddShop({
   //onAddShop: () => void;
   //shopData: { name: string; location: string; description: string; image: string };
 }) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
 
   const [flavourChecked, setFlavourChecked] = useState(
     flavours.map((f) => {
@@ -45,6 +50,18 @@ function AddShop({
       } as Flavour;
     })
   );
+
+    const [startTimeHour, setStartTimeHour] = useState(8);
+    const [startTimeMinute, setStartTimeMinute] = useState(0);
+
+    const [endTimeHour, setEndTimeHour] = useState(16);
+    const [endTimeMinute, setEndTimeMinute] = useState(0);
+
+
+  const handleSubmit = () => {
+    console.log("Start Time:", startTimeHour, ":", startTimeMinute);
+    console.log("End Time:", endTimeHour, ":", endTimeMinute);
+  };
 
   const [isCheckedCard, setIsCheckedCard] = useState(false);
 
@@ -66,19 +83,51 @@ function AddShop({
         <AlertDialogContent>
           <AlertDialogHeader>Nowe stoisko</AlertDialogHeader>
           <AlertDialogBody>
-            <FormLabel mt={4}>Data rozpoczęcia:</FormLabel>
+            <FormLabel mt={4}>Data:</FormLabel>
               <SingleDatepicker
-                name="startDate-input"
-                date={startDate}
-                onDateChange={setStartDate}
+                name="date-input"
+                date={date}
+                onDateChange={setDate}
               />
 
-            <FormLabel mt={4}>Data zakończenia:</FormLabel>
-              <SingleDatepicker
-                name="endDate-input"
-                date={endDate}
-                onDateChange={setEndDate}
-              />
+            <FormControl>
+                <FormLabel mt={4}>Godzina rozpoczęcia:</FormLabel>
+                <Stack shouldWrapChildren direction='row' align={"left"}>
+                  <NumberInput size='sm' maxW={16} value={startTimeHour} min={0} max={23} onChange={setStartTimeHour}>
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <NumberInput size='sm' maxW={16} value={startTimeMinute} min={0} max={59} step={5} onChange={setStartTimeMinute}>
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </Stack>
+                <FormLabel mt={4}>Godzina zakończenia:</FormLabel>
+                <Stack shouldWrapChildren direction='row' align={"left"}>
+                  <NumberInput size='sm' maxW={16} value={endTimeHour} min={0} max={23} onChange={setEndTimeHour}>
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <NumberInput size='sm' maxW={16} value={endTimeMinute} min={0} max={59}  step={5} onChange={setEndTimeMinute}>
+                    <NumberInputField />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                </Stack>
+              </FormControl>
+              
+
 
             <FormLabel mt={4}>Dostępne smaki obwarzanków</FormLabel>
             <CheckboxGroup colorScheme="teal">
@@ -96,9 +145,13 @@ function AddShop({
               </VStack>
             </CheckboxGroup>
             <FormLabel mt={4}>Płatności</FormLabel>
-            <Checkbox isChecked={isCheckedCard} onChange={handleTogglev2}>
+            <Checkbox isChecked={isCheckedCard} colorScheme="teal" onChange={handleTogglev2}>
                 Płatność kartą
             </Checkbox>
+            <VStack>
+              <Button mt={4} colorScheme="teal" onClick={handleSubmit}>Potwierdź</Button>
+            </VStack>
+            
           </AlertDialogBody>
         </AlertDialogContent>
       </AlertDialogOverlay>
