@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from models.shop import Shop
+from models.user import User
 from config.database import collection
 from schema.schemas import list_serial
 from bson import ObjectId
@@ -15,3 +16,30 @@ async def get_shop():
 async def post_shop(shop: Shop):
     print(shop)
     collection.insert_one(dict(shop))
+
+# @router.post("/")
+# async def create_account(user: User):
+#     username_logins.insert_one(dict(user))
+
+# @router.post("/login/")
+# async def login(username: str, password: str):
+    
+@router.post("/register")
+async def register(user: User):
+    # Hash the password before storing it
+    user_doc = {"username": user.username, "password": user.password}
+    users_collection.insert_one(user_doc)
+
+@router.post("/login")
+async def login(user: User):
+    stored_user = users_collection.find_one({"username": user.username})
+    if not stored_user or stored_user["password"] != user.password:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    return {"message": "Login successful"}
+
+@router.get("/user/{username}")
+async def get_user(username: str):
+    user = users_collection.find_one({"username": username})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
