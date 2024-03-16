@@ -1,10 +1,13 @@
 import "./App.css";
-import Example from "./components/Exaple";
+import { Container } from "@chakra-ui/react";
+import MapExample from "./components/MapExample";
 
 function App() {
   return (
     <>
-      <Example />
+      <Container>
+        <MapExample />
+      </Container>
     </>
   );
 }
