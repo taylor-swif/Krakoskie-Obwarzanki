@@ -27,7 +27,7 @@ function LocationMarker() {
           <Popup>You are here</Popup>
         </Marker>
       )}
-      <AddShop isOpen={setupOpen} onClose={() => setSetupOpen(false)} />
+      <AddShop position={position} isOpen={setupOpen} onClose={() => setSetupOpen(false)} />
     </>
   );
 }

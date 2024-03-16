@@ -20,20 +20,24 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
+import { usePost } from "../hooks/usePost";
 
 interface Flavour {
   name: string;
   isChecked: boolean;
 }
 
-const flavours = ["mak", "sezam", "sól", "mieszany", "ser"];
+const flavours = ["Ser", "Mak", "Mieszany", "Sezam", "Sól"];
 
 function AddShop({
+  position,
   isOpen,
   onClose,
+
 }: //onAddShop,
 //shopData,
 {
+  position: {lat: number, lng: number}
   isOpen: boolean;
   onClose: () => void;
   //onAddShop: () => void;
@@ -58,6 +62,10 @@ function AddShop({
     return val;
   };
 
+  const post = usePost()
+
+  const users = ["Pan Piotrek", "Pan Kamil", "Pan Wiktor", "Pan Bartek", "Pan Wojtek", "Pan Basia",]
+
   const [startTimeHour, setStartTimeHour] = useState("8");
   const [startTimeMinute, setStartTimeMinute] = useState("0");
 
@@ -70,17 +78,23 @@ function AddShop({
   const handleSubmit = () => {
     // console.log("Start Time:", startTimeHour, ":", startTimeMinute);
     // console.log("End Time:", endTimeHour, ":", endTimeMinute);
+    console.log(position)
     const body = {
-      selectedFlavours: flavourChecked
+      name: users[Math.floor(Math.random() * users.length)],
+      longitude: position.lng,
+      latitude: position.lat,
+      flavors: flavourChecked
         .filter((f) => f.isChecked)
         .map((f) => f.name),
-      selectedDate: [date.getUTCDate()+1, date.getUTCMonth()+1, date.getUTCFullYear()],
+      card_payment: isCheckedCard,
+      time: [date.getUTCDate()+1, date.getUTCMonth()+1, date.getUTCFullYear()],
       startTime: prettyTime(startTimeHour) + ":" + prettyTime(startTimeMinute),
       endTime: prettyTime(endTimeHour) + ":" + prettyTime(endTimeMinute),
-      cardValid: isCheckedCard,
+
     };
     console.log(body);
-    return body;
+    post("/", body).catch(console.log)
+    onClose();
   };
 
   const [isCheckedCard, setIsCheckedCard] = useState(false);
