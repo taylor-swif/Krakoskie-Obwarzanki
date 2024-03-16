@@ -1,8 +1,16 @@
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
@@ -12,13 +20,14 @@ export default function LoginForm() {
       p="4"
       borderWidth="2px"
       borderRadius="md"
+      width="300px"
     >
-      <FormControl id="username" isRequired>
-        <FormLabel>Nazwa użytkownika</FormLabel>
+      <FormControl id="email" isRequired>
+        <FormLabel>Email</FormLabel>
         <Input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
       <FormControl id="password" isRequired mt="4">
@@ -32,6 +41,9 @@ export default function LoginForm() {
       <Button type="submit" colorScheme="blue" mt="4">
         Zaloguj się
       </Button>
+      <Text mt="4" fontSize="sm" color="gray.500">
+        Nie masz konta? <Link to="/register">Zarejestruj się</Link>
+      </Text>
     </Box>
   );
 }
