@@ -15,16 +15,17 @@ export default function PretzelList() {
 
   const handleSellers = async () => {
     try {
+      const body = JSON.stringify({
+        lat: 50.048774,
+        long: 19.965303,
+        r: 1000000,
+      });
       const response = await fetch(`http://127.0.0.1:8000/shops/by_distance/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          lat: 50.048774,
-          long: 19.965303,
-          r: 1000000,
-        }),
+        body: body,
       });
       if (response.ok) {
         const data: Seller[] = await response.json();
@@ -40,7 +41,7 @@ export default function PretzelList() {
 
   useEffect(() => {
     handleSellers();
-  });
+  }, []);
 
   return (
     <Box maxH="400px" overflowY="auto">
@@ -51,7 +52,7 @@ export default function PretzelList() {
               <Text fontSize="s" fontWeight="bold" marginRight={3}>
                 {`${seller.name}`}
               </Text>
-              <Text>{`${(seller.distance / 1000).toFixed(2)} km`}</Text>
+              <Text>{`${seller.distance.toFixed(2)} km`}</Text>
             </Flex>
             <Flex direction="row">
               {seller.flavors.map((flavor, index) => {
