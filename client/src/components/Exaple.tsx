@@ -8,13 +8,7 @@ export default function Example() {
         <Image borderRadius="md" src="https://bit.ly/2k1H1t6" />
         <Flex align="baseline" mt={2}>
           <Badge colorScheme="pink">Plus</Badge>
-          <Text
-            ml={2}
-            textTransform="uppercase"
-            fontSize="sm"
-            fontWeight="bold"
-            color="pink.800"
-          >
+          <Text ml={2} textTransform="uppercase" fontSize="sm" fontWeight="bold" color="pink.800">
             Verified &bull; Cape Town
           </Text>
         </Flex>
@@ -25,7 +19,7 @@ export default function Example() {
         <Flex mt={2} align="center">
           <Box as={MdStar} color="orange.400" />
           <Text ml={1} fontSize="sm">
-            <b>4.84</b> (190)
+            <br>4.84</br> (190)
           </Text>
         </Flex>
       </Box>
