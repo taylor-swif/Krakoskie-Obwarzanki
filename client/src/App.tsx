@@ -1,11 +1,13 @@
 import "./App.css";
-import Example from "./components/Exaple";
-
+import { Center } from "@chakra-ui/react";
+import MapExample from "./components/MapExample";
+import Widget from "./components/Widget";
 function App() {
   return (
-    <>
-      <Example />
-    </>
+    <Center>
+      <MapExample />
+      <Widget />
+    </Center>
   );
 }
 
