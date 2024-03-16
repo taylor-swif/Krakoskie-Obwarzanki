@@ -50,15 +50,37 @@ function AddShop({
     })
   );
 
-  const [startTimeHour, setStartTimeHour] = useState(8);
-  const [startTimeMinute, setStartTimeMinute] = useState(0);
+
+  const prettyTime = (val: string) => {
+    if (val.length === 1) {
+      return "0" + val;
+    }
+    return val;
+  };
+
+  const [startTimeHour, setStartTimeHour] = useState("8");
+  const [startTimeMinute, setStartTimeMinute] = useState("0");
+
+  const [endTimeHour, setEndTimeHour] = useState("16");
+  const [endTimeMinute, setEndTimeMinute] = useState("0");
 
   const [endTimeHour, setEndTimeHour] = useState(16);
   const [endTimeMinute, setEndTimeMinute] = useState(0);
 
   const handleSubmit = () => {
-    console.log("Start Time:", startTimeHour, ":", startTimeMinute);
-    console.log("End Time:", endTimeHour, ":", endTimeMinute);
+    // console.log("Start Time:", startTimeHour, ":", startTimeMinute);
+    // console.log("End Time:", endTimeHour, ":", endTimeMinute);
+    const body = {
+      selectedFlavours: flavourChecked
+        .filter((f) => f.isChecked)
+        .map((f) => f.name),
+      selectedDate: [date.getUTCDate()+1, date.getUTCMonth()+1, date.getUTCFullYear()],
+      startTime: prettyTime(startTimeHour) + ":" + prettyTime(startTimeMinute),
+      endTime: prettyTime(endTimeHour) + ":" + prettyTime(endTimeMinute),
+      cardValid: isCheckedCard,
+    };
+    console.log(body);
+    return body;
   };
 
   const [isCheckedCard, setIsCheckedCard] = useState(false);
