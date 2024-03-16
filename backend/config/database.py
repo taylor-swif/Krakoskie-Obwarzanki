@@ -4,3 +4,4 @@ MONGO_URL = "mongodb+srv://mongoconnect:123@cluster0.dxzzzjx.mongodb.net/?retryW
 client = MongoClient(MONGO_URL)
 database = client.shop
 collection = database["shops"]
+users_collection = database["users"]
