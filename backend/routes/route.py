@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from models.shop import Shop
 from models.user import User
 from config.database import collection, users_collection
-from schema.schemas import list_serial,filter_by_distance,filter_n_nearest
+from schema.schemas import list_serial,filter_by_distance,filter_n_nearest,get_all_data
 from bson import ObjectId
 
 router = APIRouter()
@@ -31,36 +31,27 @@ async def get_n_nearest_shops(n : int,lat : float,long : float):
     return shops
 
 
-@router.post("/register")
+@router.post("/users/register")
 async def register(user: User):
     try:
-        user_doc = {"username": User.username, "password": User.password}
-        result = users_collection.insert_one(user_doc)
-        if result.inserted_id:
-            return {"message": "User registered successfully"}
-        else:
-            raise HTTPException(status_code=500, detail="Failed to register user")
+        # Check if the username already exists
+        existing_user = users_collection.find_one({"username": user.username})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Username already exists")
+        # Insert the new user into the database
+        user_doc = {"username": user.username, "password": user.password}
+        users_collection.insert_one(user_doc)
+        # Return success message
+        return {"message": "User registered successfully"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.post("/login")
+        # Log the error for debugging purposes
+        print(f"Error during registration: {e}")
+        # Raise HTTPException with 500 status code
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+@router.post("/users/login")
 async def login(user: User):
     stored_user = users_collection.find_one({"username": user.username})
     if not stored_user or stored_user["password"] != user.password:
         raise HTTPException(status_code=401, detail="Invalid username or password")
     return {"message": "Login successful"}
-
-@router.get("/user/{username}")
-async def get_user(username: str):
-    user = users_collection.find_one({"username": username})
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    print("User found successfully")
-    return user
-
-@router.get("/user/all")
-async def get_all_user():
-    users = list_serial(users_collection.find())
-    return users
-
