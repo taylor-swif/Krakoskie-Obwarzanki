@@ -16,6 +16,18 @@ class Item(BaseModel):
     name: str
     description: str = None
 
+class Shop(BaseModel):
+    longitude: str # x coordinate
+    latitude: str # y coordinate
+    user_id: str # id of the seller
+    flavors: str # enum variants separated by semicolons
+    payment_methods: str = 0 # 0 - cash, 1 - card, 2 - cash and card
+    
+class Seller(BaseModel):
+    user_id: str
+    name: str
+    surname: str
+
 @app.post("/items/", response_model=Item)
 async def create_item(item: Item):
     print(item)
