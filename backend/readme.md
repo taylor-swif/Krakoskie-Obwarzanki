@@ -1,6 +1,5 @@
 ## How to setup
 
-sudo apt install python3.11
 
 ```
 python -m venv venv
@@ -13,3 +12,4 @@ pip install -r req.txt
 ```
 uvicorn main:app --reload
 ```
+

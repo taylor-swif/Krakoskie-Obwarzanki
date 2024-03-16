@@ -8,8 +8,9 @@ from bson import ObjectId
 router = APIRouter()
 
 @router.get("/")
-async def get_all_shop():
-    shops = list_serial(collection.find())
+
+async def get_all_shops():
+    shops = get_all_data(collection.find())
     return shops
 
 @router.post("/")
@@ -28,6 +29,7 @@ async def get_n_nearest_shops(n : int,lat : float,long : float):
     localization = (float(lat),float(long))
     shops = filter_n_nearest(collection.find(),localization,n)
     return shops
+
 
 @router.post("/register")
 async def register(user: User):
@@ -53,6 +55,7 @@ async def get_user(username: str):
     user = users_collection.find_one({"username": username})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
     print("User found successfully")
     return user
 
@@ -60,3 +63,4 @@ async def get_user(username: str):
 async def get_all_user():
     users = list_serial(users_collection.find())
     return users
+
