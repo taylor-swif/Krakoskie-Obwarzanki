@@ -5,8 +5,15 @@ import {
   Popup,
   ZoomControl,
 } from "react-leaflet";
+import L from "leaflet";
 import LocationMarker from "./AddNewMarker";
+import icon from "/src/assets/icon_ob.png";
 // import LocationMarker from "./AddNewMarker";
+
+const customIcon = new L.Icon({
+  iconUrl: icon,
+  iconSize: [36, 36],
+});
 
 export default function MapExample() {
   const Cracow = { lat: 50.061389, lng: 19.938333 };
@@ -29,7 +36,7 @@ export default function MapExample() {
       />
       <LocationMarker />
       {positions.map((position, index) => (
-        <Marker key={index} position={position}>
+        <Marker key={index} position={position} icon={customIcon}>
           <Popup>{position.popupText}</Popup>
         </Marker>
       ))}
