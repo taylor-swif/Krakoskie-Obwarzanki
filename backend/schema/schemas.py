@@ -1,4 +1,5 @@
 from distance_calc import distance
+
 def get_flavors(flavors):
     return flavors.split(';')
 

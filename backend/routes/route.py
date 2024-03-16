@@ -1,13 +1,17 @@
 from fastapi import APIRouter
 from models.shop import Shop
 from config.database import collection
+
 from schema.schemas import list_serial,filter_by_distance,filter_n_nearest
+
 from bson import ObjectId
 
 router = APIRouter()
 
 @router.get("/")
+
 async def get_all_shop():
+
     shops = list_serial(collection.find())
     return shops
 
@@ -27,3 +31,4 @@ async def get_n_nearest_shops(n : int,lat : float,long : float):
     localization = (float(lat),float(long))
     shops = filter_n_nearest(collection.find(),localization,n)
     return shops
+

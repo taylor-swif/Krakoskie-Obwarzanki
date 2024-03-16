@@ -1,5 +1,6 @@
 ## How to setup
 
+
 sudo apt install python3.11
 
 ```
@@ -13,3 +14,4 @@ pip install -r req.txt
 ```
 uvicorn main:app --reload
 ```
+
