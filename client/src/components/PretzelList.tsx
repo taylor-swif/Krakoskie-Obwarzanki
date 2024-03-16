@@ -41,11 +41,25 @@ export default function PretzelList() {
               <Text>{`${seller.distance} km`}</Text>
             </Flex>
             <Flex direction="row">
-              <Badge colorScheme="pink" width="min" marginRight={1}>
+              <Badge colorScheme="yellow" width="min" marginRight={1}>
                 Ser
               </Badge>
               <Badge colorScheme="green" width="min" marginRight={1}>
                 Mak
+              </Badge>
+              <Badge
+                colorScheme="white"
+                border="1px"
+                width="min"
+                marginRight={1}
+              >
+                Sól
+              </Badge>
+              <Badge colorScheme="pink" width="min" marginRight={1}>
+                Mieszny
+              </Badge>
+              <Badge colorScheme="gray" width="min" marginRight={1}>
+                Sezam
               </Badge>
             </Flex>
           </Flex>

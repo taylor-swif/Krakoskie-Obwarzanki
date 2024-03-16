@@ -1,6 +1,5 @@
-// Widget.js
-import React, { useState } from "react";
-import { Box, Collapse, Flex, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { Box, Collapse, Flex } from "@chakra-ui/react";
 import Header from "./Header";
 import LoginForm from "./LoginForm";
 import NavBar from "./NavBar";
