@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from models.shop import Shop
 from models.user import User
-from config.database import collection
-
-from schema.schemas import list_serial,filter_by_distance,filter_n_nearest,get_all_data
+from config.database import collection, users_collection
+from schema.schemas import list_serial,filter_by_distance,filter_n_nearest
 from bson import ObjectId
 
 router = APIRouter()
@@ -32,18 +31,17 @@ async def get_n_nearest_shops(n : int,lat : float,long : float):
     return shops
 
 
-# @router.post("/")
-# async def create_account(user: User):
-#     username_logins.insert_one(dict(user))
-
-# @router.post("/login/")
-# async def login(username: str, password: str):
-    
 @router.post("/register")
 async def register(user: User):
-    # Hash the password before storing it
-    user_doc = {"username": user.username, "password": user.password}
-    users_collection.insert_one(user_doc)
+    try:
+        user_doc = {"username": User.username, "password": User.password}
+        result = users_collection.insert_one(user_doc)
+        if result.inserted_id:
+            return {"message": "User registered successfully"}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to register user")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/login")
 async def login(user: User):
@@ -57,4 +55,12 @@ async def get_user(username: str):
     user = users_collection.find_one({"username": username})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
+    print("User found successfully")
     return user
+
+@router.get("/user/all")
+async def get_all_user():
+    users = list_serial(users_collection.find())
+    return users
+
