@@ -43,4 +43,9 @@ def get_shop_by_id(id):
     return {}
 
 def get_shops_data(filtered_shops):
-    return [(get_shop_by_id(idi),distance) for idi,distance in filtered_shops]  
+    list_of_shops =[]
+    for idi,distance in filtered_shops:
+        shop = get_shop_by_id(idi)
+        shop["distance"] = distance
+        list_of_shops.append(shop)
+    return list_of_shops
