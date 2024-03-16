@@ -64,8 +64,8 @@ function AddShop({
   const [endTimeHour, setEndTimeHour] = useState("16");
   const [endTimeMinute, setEndTimeMinute] = useState("0");
 
-  const [endTimeHour, setEndTimeHour] = useState(16);
-  const [endTimeMinute, setEndTimeMinute] = useState(0);
+  // const [endTimeHour, setEndTimeHour] = useState(16);
+  // const [endTimeMinute, setEndTimeMinute] = useState(0);
 
   const handleSubmit = () => {
     // console.log("Start Time:", startTimeHour, ":", startTimeMinute);
