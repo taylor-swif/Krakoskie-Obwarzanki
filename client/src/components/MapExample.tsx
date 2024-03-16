@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  ZoomControl,
+} from "react-leaflet";
 import LocationMarker from "./AddNewMarker";
 // import LocationMarker from "./AddNewMarker";
 
@@ -11,7 +17,12 @@ export default function MapExample() {
   ];
 
   return (
-    <MapContainer center={Cracow} zoom={14} style={{ position: "relative" }}>
+    <MapContainer
+      center={Cracow}
+      zoom={14}
+      zoomControl={false}
+      style={{ position: "relative" }}
+    >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -22,6 +33,7 @@ export default function MapExample() {
           <Popup>{position.popupText}</Popup>
         </Marker>
       ))}
+      <ZoomControl position="topright" />
     </MapContainer>
   );
 }

@@ -1,6 +1,6 @@
 // Widget.js
 import React, { useState } from "react";
-import { Box, Collapse, Flex } from "@chakra-ui/react";
+import { Box, Collapse, Flex, VStack } from "@chakra-ui/react";
 import Header from "./Header";
 import LoginForm from "./LoginForm";
 import NavBar from "./NavBar";
@@ -16,10 +16,10 @@ export default function Widget() {
   return (
     <Box
       position="absolute"
-      left="50px"
-      top="100px"
+      left="30px"
+      top="15px"
       w={show ? "350px" : "350px"}
-      h={show ? "500px" : "85px"}
+      h={show ? "500px" : ""}
       zIndex={1000}
       bg="white"
       p="5"
@@ -34,7 +34,7 @@ export default function Widget() {
         <Box w="350px">
           <Router>
             <NavBar />
-            <Flex direction="column">
+            <Flex flexDirection="column" width="300px" marginTop="10px">
               <Routes>
                 <Route path="/" element={<PretzelList />} />
               </Routes>
