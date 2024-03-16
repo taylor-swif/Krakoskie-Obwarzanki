@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException
 from models.shop import Shop
 from models.user import User
 from config.database import collection
-from schema.schemas import list_serial,filter_by_distance,filter_n_nearest
+from schema.schemas import list_serial,filter_by_distance,filter_n_nearest,get_all_data
 from bson import ObjectId
 
 router = APIRouter()
 
 @router.get("/")
-async def get_all_shop():
-    shops = list_serial(collection.find())
+async def get_all_shops():
+    shops = get_all_data(collection.find())
     return shops
 
 @router.post("/")
