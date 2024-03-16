@@ -1,24 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Marker, Popup, useMapEvents } from "react-leaflet";
+import AddShop from "./AddShop";
 
 function LocationMarker() {
   const [position, setPosition] = useState(null);
+  const [setupOpen, setSetupOpen] = useState(false);
   const map = useMapEvents({
-    click() {
-      map.locate();
-      console.log("Kliknięto");
-    },
-    locationfound(e) {
-        console.log(e);
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, map.getZoom());
+    click(e) {
+      setPosition(e.latlng);
+      map.flyTo(e.latlng, map.getZoom());
+      setSetupOpen(true);
     },
   });
 
-  return position === null ? null : (
-    <Marker position={position}>
-      <Popup>You are here</Popup>
-    </Marker>
+  return (
+    <>
+      {position === null ? null : (
+        <Marker position={position}>
+          <Popup>You are here</Popup>
+        </Marker>
+      )}
+      <AddShop isOpen={setupOpen} onClose={() => setSetupOpen(false)} />
+    </>
   );
 }
 
