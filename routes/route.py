@@ -3,18 +3,26 @@ from schema.schemas import Repository
 from models.shop import Shop
 from models.user import User
 from models.queries import *
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 router = APIRouter()
 
 repo = Repository()
 
+templates = Jinja2Templates(directory="templates")
 
-@router.get("/")
+@router.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@router.get("/shops")
 async def get_all_shops():
     return repo.get_all_shops()
 
 
-@router.post("/")
+@router.post("/shops")
 async def post_shop(shop: Shop):
     repo.shops.insert_one(dict(shop))
 

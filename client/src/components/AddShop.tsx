@@ -20,7 +20,7 @@ import {
 import { useContext, useRef, useState } from "react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import { usePost } from "../hooks/usePost";
-import { IMarker, MarkerSetter } from "./Map";
+import { MarkerSetter } from "./Map";
 
 interface Flavour {
   name: string;
@@ -84,8 +84,15 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
       endTime: prettyTime(endTimeHour) + ":" + prettyTime(endTimeMinute),
     };
     // console.log(body);
-    post("/", body).catch(console.log);
-    setNewMarker(body);
+    post("/shops", body).catch(console.log);
+    setNewMarker({
+      id: "1",
+      name: "temp",
+      longitude: body.longitude,
+      latitude: body.latitude,
+      card_payment: body.card_payment,
+      flavors: body.flavors,
+    });
     onClose();
   };
 
