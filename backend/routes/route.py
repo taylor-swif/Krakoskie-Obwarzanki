@@ -8,6 +8,9 @@ router = APIRouter()
 
 repo = Repository()
 
+@router.get("/")
+async def root():
+    return {"message": "Hello World"}
 
 @router.get("/shops")
 async def get_all_shops():
