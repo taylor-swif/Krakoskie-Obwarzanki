@@ -1,25 +1,22 @@
 from fastapi import APIRouter, HTTPException
+from schema.schemas import Repository
 from models.shop import Shop
 from models.user import User
-from models.query import *
-from config.database import collection
-
-from schema.schemas import list_serial, filter_by_distance, filter_n_nearest, get_all_data
-from bson import ObjectId
+from models.queries import *
 
 router = APIRouter()
+
+repo = Repository()
 
 
 @router.get("/")
 async def get_all_shops():
-    shops = get_all_data(collection.find())
-    return shops
+    return repo.get_all_shops()
 
 
 @router.post("/")
 async def post_shop(shop: Shop):
-    print(shop)
-    collection.insert_one(dict(shop))
+    repo.shops.insert_one(dict(shop))
 
 
 @router.post("/shops/by_distance")
@@ -27,8 +24,8 @@ async def get_shops_by_dist(query: ShopsByDistance):
     r = query.r
     lat = query.lat
     long = query.long
-    shops = filter_by_distance(
-        collection.find(), localization=(lat, long), radius=r)
+    shops = repo.filter_by_distance(
+        repo.get_all_shops(), localization=(lat, long), radius=r)
     return shops
 
 
@@ -37,7 +34,8 @@ async def get_n_nearest_shops(query: ShopsByNumber):
     n = query.n
     lat = query.lat
     long = query.long
-    shops = filter_n_nearest(collection.find(), localization=(lat, long), n=n)
+    shops = repo.filter_n_nearest(
+        repo.get_all_shops(), localization=(lat, long), n=n)
     return shops
 
 
@@ -52,7 +50,7 @@ async def get_n_nearest_shops(query: ShopsByNumber):
 async def register(user: User):
     # Hash the password before storing it
     user_doc = {"username": user.username, "password": user.password}
-    users_collection.insert_one(user_doc)
+    users.insert_one(user_doc)
 
 
 @router.post("/login")

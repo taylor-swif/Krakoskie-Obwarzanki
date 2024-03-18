@@ -1,6 +1,10 @@
 from distance_calc import distance
 
-from config.database import collection
+from config.database import init_db
+
+from models.shop import Shop
+from models.user import User
+from bson import ObjectId
 
 # longitude: str # x coordinate
 #     latitude: str # y coordinate
@@ -8,48 +12,55 @@ from config.database import collection
 #     flavors: str # enum variants separated by semicolons
 #     payment_methods: str = 0 # 0 - cash, 1 - card, 2 - cash and card
 
-def invidual_serial(shop) -> dict:
-    return {
-        "id" : str(shop["_id"]),
-        "name" : shop["name"],
-        "longitude": float(shop["longitude"]),
-        "latitude": float(shop["latitude"]),
-        "card_payment" : shop["card_payment"],
-        "flavors": shop["flavors"],
-        "time": shop["time"],
-        "startTime": shop["startTime"],
-        "endTime": shop["endTime"]
-    }
 
-def get_all_data(shops) -> list:
-    return [invidual_serial(shop) for shop in shops]
-     
-def list_serial(shops) -> list:
-    list_of_dicts = [invidual_serial(shop) for shop in shops]
-    dictionary = {}
-    for shop in list_of_dicts:
-        dictionary[shop["id"]] = (shop["latitude"],shop["longitude"]) 
-    return dictionary
+class Repository:
+    def __init__(self) -> None:
+        self.shops, self.users = init_db()
 
-def filter_by_distance(shops,localization,radius = 5):
+    # def invidual_serial(shop) -> dict:
+    #     return {
+    #         "id": str(shop["_id"]),
+    #         "name": shop["name"],
+    #         "longitude": float(shop["longitude"]),
+    #         "latitude": float(shop["latitude"]),
+    #         "card_payment": shop["card_payment"],
+    #         "flavors": shop["flavors"],
+    #         "time": shop["time"],
+    #         "startTime": shop["startTime"],
+    #         "endTime": shop["endTime"]
+    #     }
+    def mapToShop(self, shop: dict) -> dict:
+        shop["id"] = str(shop["_id"])
+        del shop["_id"]
+        return shop
 
-    return get_shops_data(distance(list_serial(shops),localization,radius=radius))
+    def get_all_shops(self) -> list[dict]:
+        shops = list(self.shops.find())
+        shops = list(map(self.mapToShop, shops))
+        return shops
 
-def filter_n_nearest(shops,localization,n):
-    return get_shops_data(distance(list_serial(shops),localization,number_of_output=n))
+    def get_shop_by_id(self, id) -> dict:
+        return self.mapToShop(self.shops.find_one({"_id": ObjectId(id)}))
 
-def get_shop_by_id(id):
-    all_shops = get_all_data(collection.find())
-    for shop in all_shops:
-        if shop["id"] == id:
-            return shop
+    def insert_shop(self, shop: Shop):
+        self.shops.insert_one(shop.dict())
 
-    return {}
+    def list_serial(self, shops: list[dict]) -> list:
+        serialized = {}
+        for shop in shops:
+            serialized[shop["id"]] = (shop["latitude"], shop["longitude"])
+        return serialized
 
-def get_shops_data(filtered_shops):
-    list_of_shops =[]
-    for idi,distance in filtered_shops:
-        shop = get_shop_by_id(idi)
-        shop["distance"] = distance
-        list_of_shops.append(shop)
-    return list_of_shops
+    def filter_by_distance(self, shops, localization, radius=5):
+        return self.get_shops_data(distance(self.list_serial(shops), localization, radius=radius))
+
+    def filter_n_nearest(self, shops, localization, n):
+        return self.get_shops_data(distance(self.list_serial(shops), localization, number_of_output=n))
+
+    def get_shops_data(self, filtered_shops):
+        list_of_shops = []
+        for id, distance in filtered_shops:
+            shop = self.get_shop_by_id(id)
+            shop["distance"] = distance
+            list_of_shops.append(shop)
+        return list_of_shops
