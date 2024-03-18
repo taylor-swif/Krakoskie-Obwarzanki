@@ -1,11 +1,11 @@
 import "./App.css";
 import { Center } from "@chakra-ui/react";
-import MapExample from "./components/MapExample";
+import Map from "./components/Map.tsx";
 import Widget from "./components/Widget";
 function App() {
   return (
     <Center>
-      <MapExample />
+      <Map />
       <Widget />
     </Center>
   );

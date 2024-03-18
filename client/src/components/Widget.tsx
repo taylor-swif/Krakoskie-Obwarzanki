@@ -36,11 +36,7 @@ export default function Widget() {
             <Flex flexDirection="column" width="300px" marginTop="10px">
               <Routes>
                 <Route path="/" element={<PretzelList />} />
-              </Routes>
-              <Routes>
                 <Route path="/login" element={<LoginForm />} />
-              </Routes>
-              <Routes>
                 <Route path="/register" element={<RegisterForm />} />
               </Routes>
             </Flex>
