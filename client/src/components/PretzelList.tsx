@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Badge } from "@chakra-ui/react"; // Załóżmy, że korzystamy z Chakra UI
+import { Box, Text, Flex, Badge } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 interface Seller {
   id: string;
@@ -58,17 +58,22 @@ export default function PretzelList() {
               {seller.flavors.map((flavor, index) => {
                 let colorScheme;
                 let border = "0px";
-                if (flavor === "Ser") {
-                  colorScheme = "yellow";
-                } else if (flavor === "Mak") {
-                  colorScheme = "green";
-                } else if (flavor === "Mieszany") {
-                  colorScheme = "pink";
-                } else if (flavor === "Sól") {
-                  colorScheme = "white";
-                  border = "1px";
-                } else {
-                  colorScheme = "gray";
+                switch (flavor) {
+                  case "Ser":
+                    colorScheme = "yellow";
+                    break;
+                  case "Mak":
+                    colorScheme = "green";
+                    break;
+                  case "Mieszany":
+                    colorScheme = "pink";
+                    break;
+                  case "Sól":
+                    colorScheme = "white";
+                    border = "1px";
+                    break;
+                  default:
+                    colorScheme = "gray";
                 }
 
                 return (

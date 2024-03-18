@@ -1,5 +1,4 @@
 import {
-  Input,
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
@@ -29,20 +28,15 @@ interface Flavour {
 
 const flavours = ["Ser", "Mak", "Mieszany", "Sezam", "Sól"];
 
-function AddShop({
-  position,
-  isOpen,
-  onClose,
-
-}: //onAddShop,
-//shopData,
-{
-  position: {lat: number, lng: number}
+interface AddShopProps {
+  position: { lat: number; lng: number };
   isOpen: boolean;
   onClose: () => void;
-  //onAddShop: () => void;
-  //shopData: { name: string; location: string; description: string; image: string };
-}) {
+  // onAddShop: () => void;
+  // shopData: { name: string; location: string; description: string; image: string };
+}
+
+function AddShop({ position, isOpen, onClose }: AddShopProps) {
   const [date, setDate] = useState(new Date());
 
   const [flavourChecked, setFlavourChecked] = useState(
@@ -54,7 +48,6 @@ function AddShop({
     })
   );
 
-
   const prettyTime = (val: string) => {
     if (val.length === 1) {
       return "0" + val;
@@ -62,9 +55,16 @@ function AddShop({
     return val;
   };
 
-  const post = usePost()
+  const post = usePost();
 
-  const users = ["Pan Piotrek", "Pan Kamil", "Pan Wiktor", "Pan Bartek", "Pan Wojtek", "Pan Basia",]
+  const users = [
+    "Pan Piotrek",
+    "Pan Kamil",
+    "Pan Wiktor",
+    "Pan Bartek",
+    "Pan Wojtek",
+    "Pan Basia",
+  ];
 
   const [startTimeHour, setStartTimeHour] = useState("8");
   const [startTimeMinute, setStartTimeMinute] = useState("0");
@@ -78,22 +78,23 @@ function AddShop({
   const handleSubmit = () => {
     // console.log("Start Time:", startTimeHour, ":", startTimeMinute);
     // console.log("End Time:", endTimeHour, ":", endTimeMinute);
-    console.log(position)
+    console.log(position);
     const body = {
       name: users[Math.floor(Math.random() * users.length)],
       longitude: position.lng,
       latitude: position.lat,
-      flavors: flavourChecked
-        .filter((f) => f.isChecked)
-        .map((f) => f.name),
+      flavors: flavourChecked.filter((f) => f.isChecked).map((f) => f.name),
       card_payment: isCheckedCard,
-      time: [date.getUTCDate()+1, date.getUTCMonth()+1, date.getUTCFullYear()],
+      time: [
+        date.getUTCDate() + 1,
+        date.getUTCMonth() + 1,
+        date.getUTCFullYear(),
+      ],
       startTime: prettyTime(startTimeHour) + ":" + prettyTime(startTimeMinute),
       endTime: prettyTime(endTimeHour) + ":" + prettyTime(endTimeMinute),
-
     };
     console.log(body);
-    post("/", body).catch(console.log)
+    post("/", body).catch(console.log);
     onClose();
   };
 
@@ -114,10 +115,10 @@ function AddShop({
       leastDestructiveRef={cancelRef}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent>
+        <AlertDialogContent mt={10}>
           <AlertDialogHeader>Nowe stoisko</AlertDialogHeader>
           <AlertDialogBody>
-            <FormLabel mt={4}>Data:</FormLabel>
+            <FormLabel>Data:</FormLabel>
             <SingleDatepicker
               name="date-input"
               date={date}
@@ -157,7 +158,7 @@ function AddShop({
                   </NumberInputStepper>
                 </NumberInput>
               </Stack>
-              <FormLabel mt={4}>Godzina zakończenia:</FormLabel>
+              <FormLabel mt={2}>Godzina zakończenia:</FormLabel>
               <Stack shouldWrapChildren direction="row" align={"left"}>
                 <NumberInput
                   size="sm"
@@ -191,12 +192,13 @@ function AddShop({
               </Stack>
             </FormControl>
 
-            <FormLabel mt={4}>Dostępne smaki obwarzanków</FormLabel>
+            <FormLabel mt={2}>Dostępne smaki obwarzanków</FormLabel>
             <CheckboxGroup colorScheme="teal">
               <VStack align={"start"}>
                 {flavourChecked.map((f, i) => {
                   return (
                     <Checkbox
+                      key={i}
                       isChecked={f.isChecked}
                       onChange={(_) => handleToggle(i)}
                     >
@@ -206,7 +208,7 @@ function AddShop({
                 })}
               </VStack>
             </CheckboxGroup>
-            <FormLabel mt={4}>Płatności</FormLabel>
+            <FormLabel mt={2}>Płatności</FormLabel>
             <Checkbox
               isChecked={isCheckedCard}
               colorScheme="teal"
@@ -215,7 +217,7 @@ function AddShop({
               Płatność kartą
             </Checkbox>
             <VStack>
-              <Button mt={4} colorScheme="teal" onClick={handleSubmit}>
+              <Button mt={2} colorScheme="teal" onClick={handleSubmit}>
                 Potwierdź
               </Button>
             </VStack>
