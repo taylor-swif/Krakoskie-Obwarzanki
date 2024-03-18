@@ -8,12 +8,20 @@ import {
 import L from "leaflet";
 import LocationMarker from "./AddNewMarker";
 import icon from "/src/assets/icon_ob.png";
+import { useEffect, useState } from "react";
 
 const customIcon = new L.Icon({
   iconUrl: icon,
   iconSize: [36, 36],
 });
-
+interface Seller {
+  id: string;
+  name: string;
+  longitude: number;
+  latitude: number;
+  card_payment: boolean;
+  flavors: string[];
+}
 export default function Map() {
   const Cracow = { lat: 50.061389, lng: 19.938333 };
   const positions = [
@@ -25,6 +33,32 @@ export default function Map() {
     { lat: 50.064418, lng: 19.95454, popupText: "Pyszne obwarzaki" },
   ];
 
+  const [sellers, setSellers] = useState<Seller[]>([]);
+
+  const handleSellers = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data: Seller[] = await response.json();
+        setSellers(data);
+        console.log("Sellers fetched:", data);
+      } else {
+        console.error("Failed to fetch sellers:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred while fetching sellers:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleSellers();
+  }, []);
+
   return (
     <MapContainer center={Cracow} zoom={14} zoomControl={false}>
       <TileLayer
@@ -32,9 +66,13 @@ export default function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <LocationMarker />
-      {positions.map((position, index) => (
-        <Marker key={index} position={position} icon={customIcon}>
-          <Popup>{position.popupText}</Popup>
+      {sellers.map((position, index) => (
+        <Marker
+          key={index}
+          position={[position.longitude, position.latitude]}
+          icon={customIcon}
+        >
+          <Popup>Pyszne obwarzaki</Popup>
         </Marker>
       ))}
       <ZoomControl position="topright" />
