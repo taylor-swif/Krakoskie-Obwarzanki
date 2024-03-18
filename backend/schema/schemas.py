@@ -14,9 +14,11 @@ def invidual_serial(shop) -> dict:
         "name" : shop["name"],
         "longitude": float(shop["longitude"]),
         "latitude": float(shop["latitude"]),
-
         "card_payment" : shop["card_payment"],
-        "flavors": shop["flavors"]
+        "flavors": shop["flavors"],
+        "time": shop["time"],
+        "startTime": shop["startTime"],
+        "endTime": shop["endTime"]
     }
 
 def get_all_data(shops) -> list:

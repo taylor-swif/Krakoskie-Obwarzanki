@@ -6,3 +6,6 @@ class Shop(BaseModel):
     latitude: float # y coordinate
     flavors: list[str] # enum variants separated by semicolons
     card_payment: bool = False # 0 - cash, 1 - card, 2 - cash and card
+    time: list[int]
+    startTime: str
+    endTime: str
