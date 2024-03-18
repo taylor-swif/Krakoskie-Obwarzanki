@@ -17,9 +17,10 @@ import {
   FormControl,
   Button,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { SingleDatepicker } from "chakra-dayzed-datepicker";
 import { usePost } from "../hooks/usePost";
+import { IMarker, MarkerSetter } from "./Map";
 
 interface Flavour {
   name: string;
@@ -38,7 +39,7 @@ interface AddShopProps {
 
 function AddShop({ position, isOpen, onClose }: AddShopProps) {
   const [date, setDate] = useState(new Date());
-
+  const setNewMarker = useContext(MarkerSetter);
   const [flavourChecked, setFlavourChecked] = useState(
     flavours.map((f) => {
       return {
@@ -57,14 +58,7 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
 
   const post = usePost();
 
-  const users = [
-    "Pan Piotrek",
-    "Pan Kamil",
-    "Pan Wiktor",
-    "Pan Bartek",
-    "Pan Wojtek",
-    "Pan Basia",
-  ];
+  const users = ["Pan Piotrek", "Pan Kamil", "Pan Wiktor", "Pan Bartek", "Pan Wojtek", "Pan Basia"];
 
   const [startTimeHour, setStartTimeHour] = useState("8");
   const [startTimeMinute, setStartTimeMinute] = useState("0");
@@ -85,16 +79,13 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
       latitude: position.lat,
       flavors: flavourChecked.filter((f) => f.isChecked).map((f) => f.name),
       card_payment: isCheckedCard,
-      time: [
-        date.getUTCDate() + 1,
-        date.getUTCMonth() + 1,
-        date.getUTCFullYear(),
-      ],
+      time: [date.getUTCDate() + 1, date.getUTCMonth() + 1, date.getUTCFullYear()],
       startTime: prettyTime(startTimeHour) + ":" + prettyTime(startTimeMinute),
       endTime: prettyTime(endTimeHour) + ":" + prettyTime(endTimeMinute),
     };
-    console.log(body);
+    // console.log(body);
     post("/", body).catch(console.log);
+    setNewMarker(body);
     onClose();
   };
 
@@ -109,21 +100,13 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
 
   const cancelRef = useRef(null);
   return (
-    <AlertDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      leastDestructiveRef={cancelRef}
-    >
+    <AlertDialog isOpen={isOpen} onClose={onClose} leastDestructiveRef={cancelRef}>
       <AlertDialogOverlay>
         <AlertDialogContent mt={10}>
           <AlertDialogHeader>Nowe stoisko</AlertDialogHeader>
           <AlertDialogBody>
             <FormLabel>Data:</FormLabel>
-            <SingleDatepicker
-              name="date-input"
-              date={date}
-              onDateChange={setDate}
-            />
+            <SingleDatepicker name="date-input" date={date} onDateChange={setDate} />
 
             <FormControl>
               <FormLabel mt={4}>Godzina rozpoczęcia:</FormLabel>
@@ -197,11 +180,7 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
               <VStack align={"start"}>
                 {flavourChecked.map((f, i) => {
                   return (
-                    <Checkbox
-                      key={i}
-                      isChecked={f.isChecked}
-                      onChange={(_) => handleToggle(i)}
-                    >
+                    <Checkbox key={i} isChecked={f.isChecked} onChange={() => handleToggle(i)}>
                       {f.name}
                     </Checkbox>
                   );
@@ -209,11 +188,7 @@ function AddShop({ position, isOpen, onClose }: AddShopProps) {
               </VStack>
             </CheckboxGroup>
             <FormLabel mt={2}>Płatności</FormLabel>
-            <Checkbox
-              isChecked={isCheckedCard}
-              colorScheme="teal"
-              onChange={handleTogglev2}
-            >
+            <Checkbox isChecked={isCheckedCard} colorScheme="teal" onChange={handleTogglev2}>
               Płatność kartą
             </Checkbox>
             <VStack>

@@ -1,20 +1,9 @@
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  ZoomControl,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import LocationMarker from "./AddNewMarker";
 import icon from "/src/assets/icon_ob.png";
-import { useEffect, useState } from "react";
-
-const customIcon = new L.Icon({
-  iconUrl: icon,
-  iconSize: [36, 36],
-});
-interface Marker {
+import { createContext, useEffect, useState } from "react";
+export interface IMarker {
   id: string;
   name: string;
   longitude: number;
@@ -22,6 +11,13 @@ interface Marker {
   card_payment: boolean;
   flavors: string[];
 }
+
+export const MarkerSetter = createContext<(marker: IMarker) => void>(() => {});
+
+const customIcon = new L.Icon({
+  iconUrl: icon,
+  iconSize: [36, 36],
+});
 export default function Map() {
   const Cracow = { lat: 50.061389, lng: 19.938333 };
   // const positions = [
@@ -33,7 +29,7 @@ export default function Map() {
   //   { lat: 50.064418, lng: 19.95454, popupText: "Pyszne obwarzaki" },
   // ];
 
-  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [markers, setMarkers] = useState<IMarker[]>([]);
 
   const handleMarker = async () => {
     try {
@@ -44,7 +40,7 @@ export default function Map() {
         },
       });
       if (response.ok) {
-        const data: Marker[] = await response.json();
+        const data: IMarker[] = await response.json();
         setMarkers(data);
         console.log("Markers fetched:", data);
       } else {
@@ -54,10 +50,10 @@ export default function Map() {
       console.error("An error occurred while fetching marker:", error);
     }
   };
-
+  const [newMarker, setNewMarker] = useState({} as IMarker);
   useEffect(() => {
     handleMarker();
-  }, []);
+  }, [newMarker]);
 
   return (
     <MapContainer center={Cracow} zoom={14} zoomControl={false}>
@@ -65,11 +61,13 @@ export default function Map() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <LocationMarker />
+      <MarkerSetter.Provider value={setNewMarker}>
+        <LocationMarker />
+      </MarkerSetter.Provider>
       {markers.map((marker, index) => (
         <Marker
           key={index}
-          position={[marker.longitude, marker.latitude]}
+          position={{ lng: marker.longitude, lat: marker.latitude }}
           icon={customIcon}
         >
           <Popup>{marker.name}</Popup>

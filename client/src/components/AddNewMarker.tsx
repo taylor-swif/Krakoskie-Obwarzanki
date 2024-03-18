@@ -4,7 +4,6 @@ import AddShop from "./AddShop";
 import L from "leaflet";
 import { LatLng } from "leaflet";
 import icon from "/src/assets/icon_ob.png";
-
 const customIcon = new L.Icon({
   iconUrl: icon,
   iconSize: [36, 36],
@@ -29,11 +28,7 @@ function LocationMarker() {
         </Marker>
       )}
       {position && (
-        <AddShop
-          position={position}
-          isOpen={setupOpen}
-          onClose={() => setSetupOpen(false)}
-        />
+        <AddShop position={position} isOpen={setupOpen} onClose={() => setSetupOpen(false)} />
       )}
     </>
   );
