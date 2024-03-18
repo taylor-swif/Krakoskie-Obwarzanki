@@ -14,7 +14,7 @@ const customIcon = new L.Icon({
   iconUrl: icon,
   iconSize: [36, 36],
 });
-interface Seller {
+interface Marker {
   id: string;
   name: string;
   longitude: number;
@@ -33,9 +33,9 @@ export default function Map() {
     { lat: 50.064418, lng: 19.95454, popupText: "Pyszne obwarzaki" },
   ];
 
-  const [sellers, setSellers] = useState<Seller[]>([]);
+  const [markers, setMarkers] = useState<Marker[]>([]);
 
-  const handleSellers = async () => {
+  const handleMarker = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:8000/`, {
         method: "GET",
@@ -44,19 +44,19 @@ export default function Map() {
         },
       });
       if (response.ok) {
-        const data: Seller[] = await response.json();
-        setSellers(data);
-        console.log("Sellers fetched:", data);
+        const data: Marker[] = await response.json();
+        setMarkers(data);
+        console.log("Markers fetched:", data);
       } else {
-        console.error("Failed to fetch sellers:", response.statusText);
+        console.error("Failed to fetch marker:", response.statusText);
       }
     } catch (error) {
-      console.error("An error occurred while fetching sellers:", error);
+      console.error("An error occurred while fetching marker:", error);
     }
   };
 
   useEffect(() => {
-    handleSellers();
+    handleMarker();
   }, []);
 
   return (
@@ -66,13 +66,13 @@ export default function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <LocationMarker />
-      {sellers.map((position, index) => (
+      {markers.map((marker, index) => (
         <Marker
           key={index}
-          position={[position.longitude, position.latitude]}
+          position={[marker.longitude, marker.latitude]}
           icon={customIcon}
         >
-          <Popup>Pyszne obwarzaki</Popup>
+          <Popup>{marker.name}</Popup>
         </Marker>
       ))}
       <ZoomControl position="topright" />
