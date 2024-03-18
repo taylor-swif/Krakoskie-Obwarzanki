@@ -33,9 +33,11 @@ async def get_shops_by_dist(query: ShopsByDistance):
 
 
 @router.post("/shops/by_number")
-async def get_n_nearest_shops(n: int, lat: float, long: float):
-    localization = (float(lat), float(long))
-    shops = filter_n_nearest(collection.find(), localization, n)
+async def get_n_nearest_shops(query: ShopsByNumber):
+    n = query.n
+    lat = query.lat
+    long = query.long
+    shops = filter_n_nearest(collection.find(), localization=(lat, long), n=n)
     return shops
 
 
