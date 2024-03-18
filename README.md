@@ -1,5 +1,5 @@
 # SWM HACKATON
 
 <div align="center">
-    <img src="img/obwarzanki.gif" alt="Example GIF">
+    <img src="img/Obwarzanki.gif" alt="Example GIF">
 </div>
