@@ -24,7 +24,7 @@ function LocationMarker() {
   return (
     <>
       {position && (
-        <Marker position={position} icon={customIcon}>
+        <Marker key={position.lat} position={position} icon={customIcon}>
           <Popup>You are here</Popup>
         </Marker>
       )}

@@ -24,14 +24,14 @@ interface Marker {
 }
 export default function Map() {
   const Cracow = { lat: 50.061389, lng: 19.938333 };
-  const positions = [
-    { lat: 50.061389, lng: 19.938333, popupText: "Pyszne obwarzaki" },
-    { lat: 50.065723, lng: 19.919415, popupText: "Pyszne obwarzaki" },
-    { lat: 50.064718, lng: 19.945654, popupText: "Pyszne obwarzaki" },
-    { lat: 50.064389, lng: 19.91333, popupText: "Pyszne obwarzaki" },
-    { lat: 50.069723, lng: 19.959415, popupText: "Pyszne obwarzaki" },
-    { lat: 50.064418, lng: 19.95454, popupText: "Pyszne obwarzaki" },
-  ];
+  // const positions = [
+  //   { lat: 50.061389, lng: 19.938333, popupText: "Pyszne obwarzaki" },
+  //   { lat: 50.065723, lng: 19.919415, popupText: "Pyszne obwarzaki" },
+  //   { lat: 50.064718, lng: 19.945654, popupText: "Pyszne obwarzaki" },
+  //   { lat: 50.064389, lng: 19.91333, popupText: "Pyszne obwarzaki" },
+  //   { lat: 50.069723, lng: 19.959415, popupText: "Pyszne obwarzaki" },
+  //   { lat: 50.064418, lng: 19.95454, popupText: "Pyszne obwarzaki" },
+  // ];
 
   const [markers, setMarkers] = useState<Marker[]>([]);
 
